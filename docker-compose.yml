@@ -1,7 +1,7 @@
 services:
   fw:
     image: fw
-    buid: ./fw
+    build: ./fw
     container_name: fw
     networks:
       external-network:
@@ -38,68 +38,71 @@ services:
     tty: true
 
   dmz2:
-  image: dmz2
-  build: ./dmz/dmz2
-  container_name: dmz2
-  networks:
-    DMZ:
-      ipv4_address: 10.5.1.21
-  depends_on:
-    - fw
-  privileged: true
-  tty: true
+    image: dmz2
+    build: ./dmz/dmz2
+    container_name: dmz2
+    networks:
+      DMZ:
+        ipv4_address: 10.5.1.21
+    depends_on:
+      - fw
+    privileged: true
+    tty: true
 
   internal1:
     image: internal12
     build: ./internal/internal12
     container_name: internal1
-    network:
+    networks:
       internal-network:
         ipv4_address: 10.5.2.20
-      depends_on:
-        - fw
-      privileged: true
-      tty: true
+    depends_on:
+      - fw
+    privileged: true
+    tty: true
 
   internal2:
     image: internal12
     build: ./internal/internal12
     container_name: internal2
-    network:
+    networks:
       internal-network:
         ipv4_address: 10.5.2.21
-      depends_on:
-        - fw
-      privileged: true
-      tty: true
+    depends_on:
+      - fw
+    privileged: true
+    tty: true
 
   internal3:
     image: internal3
     build: ./internal/internal3
     container_name: internal3
-    network:
+    networks:
       internal-network:
         ipv4_address: 10.5.2.22
-      depends_on:
-        - fw
-      privileged: true
-      tty: true
-network:
+    depends_on:
+      - fw
+    privileged: true
+    tty: true
+
+networks:
   external-network:
     driver: bridge
-    impam:
+    ipam:
       config:
         - subnet: 10.5.0.0/24
           gateway: 10.5.0.254
+
   DMZ:
     driver: bridge
-    impam:
+    ipam:
       config:
         - subnet: 10.5.1.0/24
           gateway: 10.5.1.254
+
   internal-network:
     driver: bridge
-    impam:
+    ipam:
       config:
         - subnet: 10.5.2.0/24
-      gateway: 10.5.2.254
+          gateway: 10.5.2.254
