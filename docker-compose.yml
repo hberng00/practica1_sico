@@ -50,7 +50,7 @@ services:
     tty: true
 
   internal1:
-    image: internal12
+    image: internal1
     build: ./internal/internal12
     container_name: internal1
     networks:
@@ -62,7 +62,7 @@ services:
     tty: true
 
   internal2:
-    image: internal12
+    image: internal2
     build: ./internal/internal12
     container_name: internal2
     networks:
