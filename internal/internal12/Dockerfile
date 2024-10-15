@@ -15,4 +15,5 @@ COPY ./start.sh .
 
 RUN chmod +x start.sh
 
-CMD ["./start.sh"]
+CMD ["/bin/bash", "./start.sh"]
+
