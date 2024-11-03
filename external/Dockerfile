@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-RUN apt-get update && apt-get install -y nmap openssh-server net-tools iputils-ping traceroute vim nano iproute2 iptables pkg-config apache2   
+RUN apt-get update && apt-get install -y nmap openssh-server tcpdump net-tools iputils-ping traceroute vim nano iproute2 iptables pkg-config apache2   
 
 RUN mkdir /var/run/sshd
 
