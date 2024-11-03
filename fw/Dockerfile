@@ -9,11 +9,10 @@ RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_confi
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-EXPOSE 22
+EXPOSE 22 
 
 COPY ./start.sh .
 
 RUN chmod +x start.sh
 
-
-CMD ["/bin/bash", "./start.sh"]
+CMD ["./start.sh"]
