@@ -1,4 +1,5 @@
 #!/bin/bash
+sysctl -w net.ipv4.ip_forward=1
 
 # Aplicar los cambios de sysctl
 sysctl -p
