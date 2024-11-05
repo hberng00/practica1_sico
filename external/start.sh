@@ -1,14 +1,16 @@
 #!/bin/bash 
 
-# This is done to ensure that SSH traffic is routed through the router
-route add default gw 10.5.0.1
-route del default gw 10.5.0.254 
+route add default gw 10.5.1.1 
+route del default gw 10.5.1.254 
 
-# Start SSH service
+# Start the services
 service ssh start
-
-# Start Apache service
-apachectl -D FOREGROUND
+service apache2 start
 
 
-/usr/sbin/sshd -D
+# Print a message to indicate services are running
+echo "SSH and Apache services are running."
+
+# Keep the container running
+# Using tail to prevent the container from exiting
+tail -f /dev/null

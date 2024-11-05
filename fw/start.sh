@@ -28,13 +28,19 @@ iptables -A FORWARD -p tcp -s 10.5.2.0/24 -d 10.5.0.0/24 -j ACCEPT
 iptables -A FORWARD -p udp -s 10.5.2.0/24 -d 10.5.0.0/24 -j ACCEPT
 iptables -A FORWARD -p icmp -s 10.5.2.0/24 -d 10.5.0.0/24 -j ACCEPT
 
-#Permitir conexiones  tcpa la dmz1y2 por el puerto 80
+#Permitir conexiones  tcp a las dmzs
 iptables -A FORWARD -p tcp -s 10.5.0.0/16 -d 10.5.1.0/24 --dport 80 -j ACCEPT
-iptables -A FORWARD -p tcp -s 10.5.2.20 -d 10.5.1.0/24 --dport 22 -j ACCEPT
+iptables -A FORWARD -p tcp -s 10.5.2.20 -d 10.5.1.0/24 --dport 2222 -j ACCEPT
 
 # Cambiar la IP de origen para los paquetes.
 iptables -t nat -A POSTROUTING -s 10.5.2.0/24 -d 10.5.0.0/24 -j SNAT --to 10.5.0.1
 
+# Start the SSH service
+service ssh start
 
-# Iniciar el servicio SSH
-/usr/sbin/sshd -D
+# Print a message to indicate services are running
+echo "SSH  services are running."
+
+# Keep the container running
+# Using tail to prevent the container from exiting
+tail -f /dev/null

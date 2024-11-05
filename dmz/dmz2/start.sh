@@ -3,10 +3,17 @@
 route add default gw 10.5.1.1 
 route del default gw 10.5.1.254 
 
-# Start SSH service
+# Start the services
 service ssh start
+service apache2 start
+rsyslogd
+fail2ban-server -f
 
-# Start Apache service
-apachectl -D FOREGROUND
 
-/usr/sbin/sshd -D
+
+# Print a message to indicate services are running
+echo "SSH and Apache services are running."
+
+# Keep the container running
+# Using tail to prevent the container from exiting
+tail -f /dev/null
