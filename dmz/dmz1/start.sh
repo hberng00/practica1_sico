@@ -3,11 +3,12 @@
 route add default gw 10.5.1.1 
 route del default gw 10.5.1.254 
 
+rsyslogd
+
 # Start the services
 service ssh start
 service apache2 start
-rsyslogd
-fail2ban-server -f
+fail2ban-server -t
 
 
 
