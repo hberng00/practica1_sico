@@ -8,7 +8,7 @@ rsyslogd
 # Start the services
 service ssh start
 service apache2 start
-fail2ban-server -t
+fail2ban-server
 
 
 
