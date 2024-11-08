@@ -29,13 +29,11 @@ RUN mkdir /var/run/sshd && \
 
 # Create SSL certificates
 RUN mkdir -p /etc/ssl/private && \
-    mkdir -p /etc/ssl/certs
-    
+    mkdir -p /etc/ssl/certs && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
 
 # Enable Apache SSL module
 RUN a2enmod ssl
-
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
 
 # Create SSH banner
 RUN echo "************************************" > /etc/ssh/banner.txt && \

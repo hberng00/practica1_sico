@@ -10,6 +10,8 @@ service ssh start
 service apache2 start
 fail2ban-server
 
+
+
 # Print a message to indicate services are running
 echo "SSH and Apache services are running."
 
