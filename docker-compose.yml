@@ -35,6 +35,8 @@ services:
     depends_on:
       - fw
     privileged: true
+    volumes:
+      - dmz1k:/home/sshuser/
     tty: true
 
   dmz2:
@@ -47,6 +49,8 @@ services:
     depends_on:
       - fw
     privileged: true
+    volumes:
+      - dmz2k:/home/sshuser/
     tty: true
 
   internal1:
@@ -59,6 +63,8 @@ services:
     depends_on:
       - fw
     privileged: true
+    volumes:
+      - internal1k:/root/.ssh
     tty: true
 
   internal2:
@@ -106,3 +112,8 @@ networks:
       config:
         - subnet: 10.5.2.0/24
           gateway: 10.5.2.254
+
+volumes:
+  dmz1k:
+  dmz2k:
+  internal1k:

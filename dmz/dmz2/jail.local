@@ -273,11 +273,11 @@ action = %(action_)s
 
 [sshd]
 enabled = true
-port = ssh
+port = 2222
 filter = sshd
 logpath = /var/log/auth.log
-maxretry = 3
-bantime = 36000
+maxretry = 4
+bantime = 3600
 
 [dropbear]
 
