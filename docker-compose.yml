@@ -77,6 +77,8 @@ services:
     depends_on:
       - fw
     privileged: true
+    volumes:
+      - internal2k:/root/.ssh
     tty: true
 
   internal3:
@@ -89,6 +91,8 @@ services:
     depends_on:
       - fw
     privileged: true
+    volumes:
+      - internal3k:/root/.ssh
     tty: true
 
 networks:
@@ -98,7 +102,7 @@ networks:
       config:
         - subnet: 10.5.0.0/24
           gateway: 10.5.0.254
-
+  
   DMZ:
     driver: bridge
     ipam:
@@ -117,3 +121,5 @@ volumes:
   dmz1k:
   dmz2k:
   internal1k:
+  internal2k:
+  internal3k:

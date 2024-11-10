@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 route add default gw 10.5.1.1 
 route del default gw 10.5.1.254 
@@ -6,7 +6,6 @@ route del default gw 10.5.1.254
 # Start the services
 service ssh start
 service apache2 start
-
 
 # Print a message to indicate services are running
 echo "SSH and Apache services are running."

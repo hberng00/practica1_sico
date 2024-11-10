@@ -13,9 +13,7 @@ RUN apt-get update && apt-get install -y \
     nano \
     iproute2 \
     iptables \
-    pkg-config && \
-    # Clean up to reduce image size
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    pkg-config
 
 # Create the SSH daemon run directory
 RUN mkdir -p /var/run/sshd

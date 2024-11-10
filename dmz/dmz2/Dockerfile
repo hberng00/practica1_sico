@@ -17,9 +17,7 @@ RUN apt-get update && apt-get install -y \
     rsyslog \
     apache2 \
     libpam-google-authenticator \
-    openssl && \
-    # Clean up to reduce image size
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    openssl
 
 # Configure SSH
 RUN mkdir /var/run/sshd && \
@@ -27,14 +25,16 @@ RUN mkdir /var/run/sshd && \
     useradd -ms /bin/bash sshuser && echo "sshuser:1234" | chpasswd
 
 
-# Create SSL certificates
-RUN mkdir -p /etc/ssl/private && \
-    mkdir -p /etc/ssl/certs && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+# Create SSL certificates with default subject to avoid prompts
+RUN mkdir -p /etc/ssl/private /etc/ssl/certs && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/ssl/private/apache-selfsigned.key \
+    -out /etc/ssl/certs/apache-selfsigned.crt \
+    -subj "/C=US/ST=State/L=Location/O=Organization/OU=Unit/CN=10.5.1.21"
 
 # Enable Apache SSL module
 RUN a2enmod ssl
-
+    
 # Create SSH banner
 RUN echo "************************************" > /etc/ssh/banner.txt && \
     echo "* Bienvenido al sistema de DMZ     *" >> /etc/ssh/banner.txt && \
@@ -62,6 +62,7 @@ RUN echo 'auth required pam_unix.so nullok_secure' >> /etc/pam.d/sshd && \
 # Copy Fail2Ban configuration
 COPY ./jail.local /etc/fail2ban/jail.local
  
+# Copy Apache SSL site configuration and enable it
 COPY ./default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 RUN a2ensite default-ssl.conf
 
