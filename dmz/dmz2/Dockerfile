@@ -49,7 +49,6 @@ RUN sed -i 's/#Port 22/Port 2222/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
     sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/' /etc/ssh/sshd_config && \
     sed -i 's/#MaxAuthTries 6/MaxAuthTries 2/' /etc/ssh/sshd_config && \
-    sed -i 's/#ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config && \
     sed -i 's/KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/' /etc/ssh/sshd_config && \
     sed -i 's/#UsePAM no/UsePAM yes/' /etc/ssh/sshd_config && \
     echo 'Banner /etc/ssh/banner.txt' >> /etc/ssh/sshd_config && \

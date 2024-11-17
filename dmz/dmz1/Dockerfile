@@ -2,29 +2,54 @@ FROM ubuntu:latest
 
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
-    nmap \
     openssh-server \
-    fail2ban \
-    tcpdump \
     net-tools \
     iputils-ping \
     traceroute \
-    vim \
-    nano \
     iproute2 \
+    nmap \
     iptables \
     pkg-config \
-    rsyslog \
     apache2 \
+    curl \
+    nano \
+    fail2ban \
     libpam-google-authenticator \
-    openssl
+    openssl \
+    rsyslog \
+    git \
+    python3-venv \
+    libssl-dev \
+    libffi-dev \
+    build-essential \
+    libpython3-dev \
+    python3-minimal \
+    authbind
 
 # Configure SSH
 RUN mkdir /var/run/sshd && \
     echo 'root:root' | chpasswd && \
     useradd -ms /bin/bash sshuser && echo "sshuser:1234" | chpasswd
 
+RUN useradd -m cowrieuser
 
+USER cowrieuser
+
+WORKDIR /home/cowrieuser
+RUN git clone https://github.com/cowrie/cowrie.git
+
+WORKDIR /home/cowrieuser/cowrie
+
+RUN python3 -m venv venv && \
+   venv/bin/pip install -r requirements.txt
+
+
+RUN cp /home/cowrieuser/cowrie/etc/cowrie.cfg.dist /home/cowrieuser/cowrie/etc/cowrie.cfg
+RUN sed -i 's/hostname = svr04/hostname = Hugo/' /home/cowrieuser/cowrie/etc/cowrie.cfg
+RUN cp /home/cowrieuser/cowrie/etc/userdb.example /home/cowrieuser/cowrie/etc/userdb.txt
+RUN echo 'ataque:x:ataque' >> /home/cowrieuser/cowrie/etc/userdb.txt
+
+USER root
 # Create SSL certificates with default subject to avoid prompts
 RUN mkdir -p /etc/ssl/private /etc/ssl/certs && \
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
@@ -41,10 +66,11 @@ RUN echo "************************************" > /etc/ssh/banner.txt && \
     echo "* Alumno: Hugo Bernardo Garmilla   *" >> /etc/ssh/banner.txt && \
     echo "************************************" >> /etc/ssh/banner.txt
 
+
 USER root
 
 # Modify SSH configuration
-RUN sed -i 's/#Port 22/Port 2222/' /etc/ssh/sshd_config && \
+RUN sed -i 's/#Port 22/Port 22/' /etc/ssh/sshd_config && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
     sed -i 's/#PermitEmptyPasswords no/PermitEmptyPasswords no/' /etc/ssh/sshd_config && \
@@ -67,13 +93,15 @@ COPY ./default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 RUN a2ensite default-ssl.conf
 
 # Expose ports for SSH, Apache, and HTTPS
-EXPOSE 80 2222 443
+EXPOSE 80 22 443 
 
 # Copy HTML file for Apache
 COPY ./index.html /var/www/html/index.html
 
-# Copy and set permissions for start script
+# Copy files
 COPY ./start.sh /start.sh
+
+# Set execute permission for start.sh
 RUN chmod +x /start.sh
 
 # Command to run when the container starts
